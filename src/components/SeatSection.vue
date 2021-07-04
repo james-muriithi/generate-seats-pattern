@@ -28,9 +28,17 @@ export default {
   },
   data() {
     return {
+        set_prefix: 'A',
       seats: [],
       cols: 5,
       rows: 13,
+      aisleColumns: [2, 4],
+      aisleRows: [],
+      gaps: [
+        { row: 2, col: 1 },
+        { row: 3, col: 1 },
+      ],
+      disabledSeats: [],
     };
   },
   methods: {
@@ -49,7 +57,7 @@ export default {
             this.seats.push({
               position: { r: y, c: x },
               status: "RA",
-              seat_number,
+              seat_number: `${this.set_prefix}${seat_number}`,
             });
             seat_number++;
           }
@@ -57,8 +65,14 @@ export default {
       }
     },
     isAisle(c, r) {
-      if (c == 3) {
-        if (r >= 1 && r <= 11) {
+      if (this.gaps.length > 0) {
+        if (this.gaps.some(({ row, col }) => row == r && col == c)) {
+          return true;
+        }
+      }
+
+      if (this.aisleColumns.some((column) => column == c)) {
+        if (r >= 1 && r <= this.rows - 1) {
           return true;
         }
       }
