@@ -5,6 +5,7 @@
     data-name="Layer 1"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 100 100"
+    v-contextmenu:contextmenu1
   >
     <path
       :class="classifier(idxr, idxc)"
@@ -28,10 +29,27 @@
     />
     <text class="seat-label" x="25" y="55">{{ seat.seat_number }}</text>
   </svg>
+  <v-contextmenu ref="contextmenu1">
+    <v-contextmenu-item @click="makeGap">Make Gap</v-contextmenu-item>
+    <v-contextmenu-item>Disable Seat</v-contextmenu-item>
+    <v-contextmenu-item>Rename Seat</v-contextmenu-item>
+  </v-contextmenu>
 </template>
 
 <script>
+import { directive, Contextmenu, ContextmenuItem } from "v-contextmenu";
+import "v-contextmenu/dist/themes/default.css";
+
 export default {
+  directives: {
+    contextmenu: directive,
+  },
+
+  components: {
+    [Contextmenu.name]: Contextmenu,
+    [ContextmenuItem.name]: ContextmenuItem,
+  },
+  emits: ['makeGap'],
   props: {
     idxr: {
       type: Number,
@@ -49,6 +67,9 @@ export default {
     classifier() {
       return "cls-ra";
     },
+    makeGap(){
+      this.$emit('makeGap', this.seat)
+    }
   },
 };
 </script>

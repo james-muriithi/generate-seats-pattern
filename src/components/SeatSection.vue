@@ -1,7 +1,20 @@
 <template>
   <div>
     <table class="mx-auto">
+      <tr>
+        <th></th>
+        <th
+          class="pl-2"
+          v-for="(indexc, column) in cols"
+          :key="column"
+          style="width: 50px"
+        >
+        {{indexc}}
+        </th>
+      </tr>
+
       <tr v-for="(indexr, row) in rows" :key="row">
+        <th>{{indexr}}</th>
         <td
           class="pl-2"
           v-for="(indexc, column) in cols"
@@ -13,6 +26,7 @@
             :idxr="indexr"
             :seat="getSeat(indexr, indexc)"
             v-if="!isAisle(indexc, indexr)"
+            @makeGap="makeGap"
           ></seat>
         </td>
       </tr>
@@ -78,6 +92,9 @@ export default {
       }
       return false;
     },
+    makeGap(seat){
+      this.gaps.push({row: seat.position.r, col: seat.position.c})
+    }
   },
   beforeMount() {
     this.generateSeats();
