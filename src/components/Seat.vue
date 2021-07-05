@@ -30,7 +30,7 @@
     <text class="seat-label" x="25" y="55">{{ seat.seat_number }}</text>
   </svg>
   <v-contextmenu ref="contextmenu1">
-    <v-contextmenu-item @click="makeGap">Make Seat A Gap</v-contextmenu-item>
+    <v-contextmenu-item @click="makeSeatAGap">Make Seat A Gap</v-contextmenu-item>
     <v-contextmenu-item>Disable Seat</v-contextmenu-item>
     <v-contextmenu-item>Rename Seat</v-contextmenu-item>
   </v-contextmenu>
@@ -49,7 +49,7 @@ export default {
     [Contextmenu.name]: Contextmenu,
     [ContextmenuItem.name]: ContextmenuItem,
   },
-  emits: ['makeGap'],
+  inject: ['makeGap'],
   props: {
     idxr: {
       type: Number,
@@ -67,8 +67,8 @@ export default {
     classifier() {
       return "cls-ra";
     },
-    makeGap(){
-      this.$emit('makeGap', this.seat)
+    makeSeatAGap(){
+      this.makeGap(this.seat)
     }
   },
 };

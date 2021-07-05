@@ -10,7 +10,6 @@
           style="width: 50px"
           :index="indexc"
           type="column"
-          @makeAisle="makeAisle"
         >
         </table-header>
       </tr>
@@ -20,7 +19,6 @@
           class="pl-2"
           style="width: 50px"
           :index="indexr"
-          @makeAisle="makeAisle"
         ></table-header>
         <td
           class="pl-2"
@@ -33,7 +31,6 @@
             :idxr="indexr"
             :seat="getSeat(indexr, indexc)"
             v-if="!isAisle(indexc, indexr)"
-            @makeGap="makeGap"
           ></seat>
         </td>
       </tr>
@@ -50,9 +47,6 @@ export default {
     TableHeader,
   },
   props: {
-    set_prefix: {
-      required: true,
-    },
     seats: {
       required: true,
       type: Array,
@@ -75,14 +69,16 @@ export default {
     },
     gaps: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     disabledSeats: {
-      required: false,
-      type: Number,
+      default: () => [],
+      type: Array,
     },
   },
-  data() {},
+  data() {
+    return {};
+  },
   methods: {
     getSeat(r, c) {
       const seat = this.seats.find((seat) => {
@@ -91,7 +87,7 @@ export default {
 
       return seat;
     },
-    
+
     isAisle(c, r) {
       if (this.gaps.length > 0) {
         if (this.gaps.some(({ row, col }) => row == r && col == c)) {

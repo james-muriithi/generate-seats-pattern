@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-5 py-5">
-        <form-section></form-section>
+        <form-section @generate="generateSeats"></form-section>
       </div>
       <div class="col-sm-7 py-5">
         <seat-section
@@ -31,14 +31,17 @@ export default {
   props: {
     msg: String,
   },
+  provide() {
+    return { makeGap: this.makeGap, makeAisle: this.makeAisle };
+  },
   data() {
     return {
       set_prefix: "A",
       seats: [],
-      cols: 5,
-      rows: 13,
-      aisleColumns: [2, 4],
-      aisleRows: [5],
+      cols: 0,
+      rows: 0,
+      aisleColumns: [],
+      aisleRows: [],
       gaps: [
         { row: 2, col: 1 },
         { row: 3, col: 1 },
@@ -47,8 +50,12 @@ export default {
     };
   },
   methods: {
-    generateSeats() {
+    generateSeats(data) {
       let seat_number = 1;
+      this.rows = parseInt(data.rows) || 0;
+      this.cols = parseInt(data.cols) || 0;
+      this.aisleColumns = data.aisleColumns || [2];
+      console.log(data);
       for (let y = 1; y <= this.rows; ++y) {
         for (let x = 1; x <= this.cols; ++x) {
           if (!this.isAisle(x, y)) {
@@ -91,9 +98,6 @@ export default {
         this.aisleColumns.push(data.index);
       }
     },
-  },
-  beforeMount() {
-    this.generateSeats();
   },
 };
 </script>

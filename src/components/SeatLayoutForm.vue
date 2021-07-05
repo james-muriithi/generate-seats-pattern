@@ -8,6 +8,7 @@
           class="form-control"
           aria-describedby="emailHelp"
           autocomplete="off"
+          v-model="rows"
         />
       </div>
       <div class="col-6 mb-2">
@@ -17,6 +18,7 @@
           class="form-control"
           aria-describedby="emailHelp"
           autocomplete="off"
+          v-model="cols"
         />
       </div>
       <div class="col-12 mb-2">
@@ -38,11 +40,29 @@
         />
       </div>
     </div>
-    
-    <button type="button" class="btn btn-primary">Preview</button>
+
+    <button type="button" class="btn btn-primary" @click="generate">
+      Preview
+    </button>
   </form>
 </template>
 
 <script>
-export default {};
+export default {
+  emits: ["generate"],
+  data() {
+    return {
+      rows: "",
+      cols: "",
+    };
+  },
+  methods: {
+      generate(){
+          this.$emit('generate', {
+              rows: this.rows,
+              cols: this.cols,
+          })
+      }
+  }
+};
 </script>
