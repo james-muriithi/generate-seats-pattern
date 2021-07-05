@@ -30,7 +30,7 @@
     <text class="seat-label" x="25" y="55">{{ seat.seat_number }}</text>
   </svg>
   <v-contextmenu ref="contextmenu1">
-    <v-contextmenu-item @click="makeGap">Make Gap</v-contextmenu-item>
+    <v-contextmenu-item @click="makeGap">Make Seat A Gap</v-contextmenu-item>
     <v-contextmenu-item>Disable Seat</v-contextmenu-item>
     <v-contextmenu-item>Rename Seat</v-contextmenu-item>
   </v-contextmenu>

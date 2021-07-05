@@ -3,23 +3,30 @@
     <table class="mx-auto">
       <tr>
         <th></th>
-        <th
-          class="pl-2"
+        <table-header
+          class="pb-2"
           v-for="(indexc, column) in cols"
           :key="column"
           style="width: 50px"
+          :index="indexc"
+          type="column"
+          @makeAisle="makeAisle"
         >
-        {{indexc}}
-        </th>
+        </table-header>
       </tr>
 
       <tr v-for="(indexr, row) in rows" :key="row">
-        <th>{{indexr}}</th>
+        <table-header
+          class="pl-2"
+          style="width: 50px"
+          :index="indexr"
+          @makeAisle="makeAisle"
+        ></table-header>
         <td
           class="pl-2"
           v-for="(indexc, column) in cols"
           :key="column"
-          style="width: 50px"
+          style="width: 50px; height: 50px;"
         >
           <seat
             :idxc="indexc"
@@ -36,18 +43,22 @@
 
 <script>
 import Seat from "./Seat.vue";
+import TableHeader from "./TableHeader.vue";
 export default {
   components: {
     Seat,
+    TableHeader,
   },
   data() {
     return {
-        set_prefix: 'A',
+      set_prefix: "A",
       seats: [],
       cols: 5,
       rows: 13,
       aisleColumns: [2, 4],
-      aisleRows: [],
+      aisleRows: [
+        5
+      ],
       gaps: [
         { row: 2, col: 1 },
         { row: 3, col: 1 },
@@ -86,14 +97,26 @@ export default {
       }
 
       if (this.aisleColumns.some((column) => column == c)) {
+        if(this.aisleRows.some((row) => row == r)){
+          return true;
+        }
         if (r >= 1 && r <= this.rows - 1) {
           return true;
         }
+      }else if(this.aisleRows.some((row) => row == r)) {
+        return true;
       }
       return false;
     },
-    makeGap(seat){
-      this.gaps.push({row: seat.position.r, col: seat.position.c})
+    makeGap(seat) {
+      this.gaps.push({ row: seat.position.r, col: seat.position.c });
+    },
+    makeAisle(data){
+      if (data.target == 'row') {
+        this.aisleRows.push(data.index)
+      }else{
+        this.aisleColumns.push(data.index)
+      }
     }
   },
   beforeMount() {
