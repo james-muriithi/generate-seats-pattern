@@ -1,14 +1,15 @@
 <template>
-  <svg
+  <span>
+    <svg
     id="Layer_1"
-    class="seat"
     data-name="Layer 1"
+    :class="`seat${disabled ? ' disabled' : ''}`"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 100 100"
     v-contextmenu:contextmenu1
   >
     <path
-      :class="classifier(idxr, idxc)"
+      :class="`${classifier(idxr, idxc)}${disabled ? ' cls-disabled' : ''}`"
       d="M36,17.3H80.4a8.88,8.88,0,0,1,6.72-7.25A5.77,5.77,0,0,0,81.57,6H36a5.72,5.72,0,0,0-5.76,5.66A5.71,5.71,0,0,0,36,17.3Z"
     />
     <path
@@ -30,10 +31,11 @@
     <text class="seat-label" x="25" y="55">{{ seat.seat_number }}</text>
   </svg>
   <v-contextmenu ref="contextmenu1">
-    <v-contextmenu-item @click="makeSeatAGap">Make Seat A Gap</v-contextmenu-item>
-    <v-contextmenu-item>Disable Seat</v-contextmenu-item>
-    <v-contextmenu-item>Rename Seat</v-contextmenu-item>
-  </v-contextmenu>
+      <v-contextmenu-item @click="makeSeatAGap">Remove Seat</v-contextmenu-item>
+      <v-contextmenu-item @click="disableMySeat">{{ seat.disabled ? 'Enable Seat': 'Disable Seat' }}</v-contextmenu-item>
+      <v-contextmenu-item @click="renameMySeat">Rename Seat</v-contextmenu-item>
+    </v-contextmenu>
+  </span>
 </template>
 
 <script>
@@ -49,7 +51,7 @@ export default {
     [Contextmenu.name]: Contextmenu,
     [ContextmenuItem.name]: ContextmenuItem,
   },
-  inject: ['makeGap'],
+  inject: ["makeGap", "renameSeat", "getSeat", "getSeatWithRC", "disableSeat"],
   props: {
     idxr: {
       type: Number,
@@ -62,14 +64,42 @@ export default {
     seat: {
       type: Object,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
-    classifier() {
-      return "cls-ra";
+    classifier(r, c) {
+      let seat = this.getSeatWithRC(r, c);
+      if (seat != null) {
+        if (seat.disabled) {
+          return "cls-ra cls-disabled ";
+        }
+        return "cls-ra";
+      }
     },
-    makeSeatAGap(){
-      this.makeGap(this.seat)
-    }
+    makeSeatAGap() {
+      this.makeGap(this.seat);
+    },
+    disableMySeat() {
+      this.disableSeat({row: this.seat.position.r, col: this.seat.position.c});
+    },
+    renameMySeat() {
+      console.log(this.seat);
+      var seatNumber = prompt("Please enter your name", this.seat.seat_number);
+      if (seatNumber) {
+        if (!this.getSeat(seatNumber)) {
+          this.renameSeat({
+            row: this.seat.position.r,
+            col: this.seat.position.c,
+            seat_number: seatNumber,
+          });
+        } else if (seatNumber != this.seat.seat_number) {
+          alert("seat number is already taken");
+        }
+      }
+    },
   },
 };
 </script>
@@ -83,6 +113,11 @@ export default {
   transform: rotate(90deg);
   cursor: pointer;
 }
+
+.seat.disabled {
+  cursor: default;
+  /* pointer-events:none; */
+}
 .seat-label {
   font-size: 23px;
   font-weight: 700;
@@ -93,11 +128,16 @@ export default {
   stroke: #000;
   stroke-miterlimit: 10;
 }
+.cls-disabled {
+  fill: #777575 !important;
+  stroke: #000 !important;
+  stroke-miterlimit: 10;
+}
 .cls-ra {
   fill: #fff;
-  stroke: rgb(155, 150, 150);
+  stroke: rgb(7, 7, 7);
   stroke-miterlimit: 10;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .cls-rb {
   fill: gray;

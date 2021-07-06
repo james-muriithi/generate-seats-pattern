@@ -10,6 +10,7 @@
           style="width: 50px"
           :index="indexc"
           type="column"
+          @disableSeats="disableSeats"
         >
         </table-header>
       </tr>
@@ -19,6 +20,7 @@
           class="pl-2"
           style="width: 50px"
           :index="indexr"
+          @disableSeats="disableSeats"
         ></table-header>
         <td
           class="pl-2"
@@ -30,6 +32,7 @@
             :idxc="indexc"
             :idxr="indexr"
             :seat="getSeat(indexr, indexc)"
+            :disabled="isDisabled(indexr, indexc)"
             v-if="!isAisle(indexc, indexr)"
           ></seat>
         </td>
@@ -46,6 +49,7 @@ export default {
     Seat,
     TableHeader,
   },
+  inject: ["disableSeat"],
   props: {
     seats: {
       required: true,
@@ -87,7 +91,6 @@ export default {
 
       return seat;
     },
-
     isAisle(c, r) {
       if (this.gaps.length > 0) {
         if (this.gaps.some(({ row, col }) => row == r && col == c)) {
@@ -106,6 +109,23 @@ export default {
         return true;
       }
       return false;
+    },
+    isDisabled(row, col) {
+      return this.disabledSeats.some(
+        ({ row: r, col: c }) => r == row && c == col
+      );
+    },
+    disableSeats({ index, target }) {
+      console.log(index, target);
+      if (target == "row") {
+        for (let i = 1; i <= this.cols; i++) {
+          this.disableSeat({ row: index, col: i });
+        }
+      } else if (target == "column") {
+        for (let i = 1; i <= this.rows; i++) {
+          this.disableSeat({ row: i, col: index });
+        }
+      }
     },
   },
 };

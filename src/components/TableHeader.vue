@@ -5,7 +5,7 @@
       <v-contextmenu-item @click="makeMyAisle" class="text-capitalize"
         >Make {{ type }} a Gap</v-contextmenu-item
       >
-      <v-contextmenu-item>Disable Seats</v-contextmenu-item>
+      <v-contextmenu-item @click="disableSeats">Disable Seats</v-contextmenu-item>
     </v-contextmenu>
   </th>
 </template>
@@ -42,6 +42,12 @@ export default {
       };
 
       this.makeAisle(data);
+    },
+    disableSeats() {
+      this.$emit("disableSeats", {
+        index: this.index,
+        target: this.type,
+      });
     },
   },
 };

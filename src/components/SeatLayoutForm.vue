@@ -22,20 +22,11 @@
         />
       </div>
       <div class="col-12 mb-2">
-        <label for="" class="form-label">Aisle Colums</label>
+        <label for="" class="form-label">Seat Number Prefix (optional)</label>
         <input
-          type="number"
+          type="text"
           class="form-control"
-          aria-describedby="emailHelp"
-          autocomplete="off"
-        />
-      </div>
-      <div class="col-12 mb-2">
-        <label for="" class="form-label">Aisle Rows</label>
-        <input
-          type="number"
-          class="form-control"
-          aria-describedby="emailHelp"
+          v-model="seat_prefix"
           autocomplete="off"
         />
       </div>
@@ -44,25 +35,82 @@
     <button type="button" class="btn btn-primary" @click="generate">
       Preview
     </button>
+    <div class="mt-3">
+      <div class="mb-1" v-if="gaps.length > 0">
+        <p class="mb-1">Removed Seats</p>
+        <material-chip
+          v-for="gap in gaps"
+          :text="`Col ${gap.col} Row ${gap.row}`"
+          :index="gap"
+          :key="gap"
+          @remove="removeGap(gap)"
+        />
+      </div>
+      <div class="mb-1" v-if="aisleColumns.length > 0">
+        <p class="mb-1">Aisle Columns</p>
+        <material-chip
+          v-for="col in aisleColumns"
+          :text="`Column ${col}`"
+          :index="col"
+          :key="col"
+          @remove="removeAisleColumn(col)"
+        />
+      </div>
+
+      <!-- aisle rows -->
+      <div class="" v-if="aisleRows.length > 0">
+        <p class="mb-1">Aisle Rows</p>
+        <material-chip
+          v-for="row in aisleRows"
+          :text="`Row ${row}`"
+          :index="row"
+          :key="row"
+          @remove="removeAisleRow(row)"
+        />
+      </div>
+    </div>
   </form>
 </template>
 
 <script>
+import MaterialChip from "./UI/MaterialChip.vue";
 export default {
+  components: { MaterialChip },
   emits: ["generate"],
+  inject: ['removeAisleColumn', 'removeAisleRow', 'removeGap'],
+  props: {
+    aisleColumns: {
+      default: () => [],
+      type: Array,
+    },
+    aisleRows: {
+      default: () => [],
+      type: Array,
+    },
+    gaps: {
+      type: Array,
+      default: () => [],
+    },
+    disabledSeats: {
+      default: () => [],
+      type: Array,
+    },
+  },
   data() {
     return {
       rows: "",
       cols: "",
+      seat_prefix: "",
     };
   },
   methods: {
-      generate(){
-          this.$emit('generate', {
-              rows: this.rows,
-              cols: this.cols,
-          })
-      }
-  }
+    generate() {
+      this.$emit("generate", {
+        rows: this.rows,
+        cols: this.cols,
+        seat_prefix: this.seat_prefix,
+      });
+    },
+  },
 };
 </script>
