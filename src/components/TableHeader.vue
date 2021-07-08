@@ -5,7 +5,9 @@
       <v-contextmenu-item @click="makeMyAisle" class="text-capitalize"
         >Make {{ type }} a Gap</v-contextmenu-item
       >
-      <v-contextmenu-item @click="disableSeats">Disable Seats</v-contextmenu-item>
+      <v-contextmenu-item @click="disableSeats"
+        >Disable Seats</v-contextmenu-item
+      >
     </v-contextmenu>
   </th>
 </template>
@@ -16,29 +18,29 @@ import "v-contextmenu/dist/themes/default.css";
 
 export default {
   directives: {
-    contextmenu: directive,
+    contextmenu: directive
   },
   inject: ["makeAisle"],
   components: {
     [Contextmenu.name]: Contextmenu,
-    [ContextmenuItem.name]: ContextmenuItem,
+    [ContextmenuItem.name]: ContextmenuItem
   },
   emits: ["disableSeats"],
   props: {
     index: {
       type: Number,
-      required: true,
+      required: true
     },
     type: {
       type: String,
-      default: "row",
-    },
+      default: "row"
+    }
   },
   methods: {
     makeMyAisle() {
       let data = {
         index: this.index,
-        target: this.type,
+        target: this.type
       };
 
       this.makeAisle(data);
@@ -46,10 +48,10 @@ export default {
     disableSeats() {
       this.$emit("disableSeats", {
         index: this.index,
-        target: this.type,
+        target: this.type
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

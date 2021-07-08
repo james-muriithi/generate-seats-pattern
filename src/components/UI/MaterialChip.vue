@@ -11,19 +11,19 @@ export default {
   props: {
     text: {
       type: String,
-      required: true,
+      required: true
     },
     index: {
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
     close() {
       if (confirm("Are you sure you want to remove")) {
         this.$emit("remove", this.index);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

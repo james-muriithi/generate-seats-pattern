@@ -93,31 +93,31 @@ export default {
   props: {
     aisleColumns: {
       default: () => [],
-      type: Array,
+      type: Array
     },
     aisleRows: {
       default: () => [],
-      type: Array,
+      type: Array
     },
     gaps: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     disabledSeats: {
       default: () => [],
-      type: Array,
+      type: Array
     },
     seatClasses: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
   data() {
     return {
       rows: "",
       cols: "",
       seat_prefix: "",
-      defaultSeatClass: "1",
+      defaultSeatClass: "1"
     };
   },
   methods: {
@@ -126,12 +126,12 @@ export default {
         rows: this.rows,
         cols: this.cols,
         seat_prefix: this.seat_prefix,
-        defaultSeatClass: this.getSeatClass(this.defaultSeatClass),
+        defaultSeatClass: this.getSeatClass(this.defaultSeatClass)
       });
     },
     getSeatClass(id) {
-      return this.seatClasses.find((seatClass) => seatClass.id == id);
-    },
-  },
+      return this.seatClasses.find(seatClass => seatClass.id == id);
+    }
+  }
 };
 </script>

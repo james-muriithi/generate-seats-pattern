@@ -79,12 +79,12 @@ import "v-contextmenu/dist/themes/default.css";
 
 export default {
   directives: {
-    contextmenu: directive,
+    contextmenu: directive
   },
 
   components: {
     [Contextmenu.name]: Contextmenu,
-    [ContextmenuItem.name]: ContextmenuItem,
+    [ContextmenuItem.name]: ContextmenuItem
   },
   inject: [
     "makeGap",
@@ -93,56 +93,58 @@ export default {
     "getSeatWithRC",
     "disableSeat",
     "seatClasses",
-    "changeSeatClass",
+    "changeSeatClass"
   ],
   props: {
     idxr: {
       type: Number,
-      required: true,
+      required: true
     },
     idxc: {
       type: Number,
-      required: true,
+      required: true
     },
     seat: {
-      type: Object,
+      type: Object
     },
     disabled: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       open: false,
-      defaultSeatClass: 1,
+      defaultSeatClass: 1
     };
   },
   computed: {
-    seatTooltip(){
-      return this.seat.disabled ? `Disabled seat`: `${this.seat.class.name} class`
+    seatTooltip() {
+      return this.seat.disabled
+        ? `Disabled seat`
+        : `${this.seat.class.name} class`;
     },
     seatClassColors() {
       let data = {};
       if (this.seat.disabled) {
         data = {
           "--disabled-stroke": "#ada9a9",
-          "--disabled-fill": "#ada9a9",
+          "--disabled-fill": "#ada9a9"
         };
       } else if (this.seat.class) {
         data = {
           "--stroke": "transparent",
-          "--fill": this.seat.class.color,
+          "--fill": this.seat.class.color
         };
       }
 
       return data;
-    },
+    }
   },
   watch: {
     seat() {
       this.defaultSeatClass = this.seat.class.id || this.defaultSeatClass;
-    },
+    }
   },
   methods: {
     seatCentre(r, c) {
@@ -170,7 +172,7 @@ export default {
     disableMySeat() {
       this.disableSeat({
         row: this.seat.position.r,
-        col: this.seat.position.c,
+        col: this.seat.position.c
       });
     },
     renameMySeat() {
@@ -180,7 +182,7 @@ export default {
           this.renameSeat({
             row: this.seat.position.r,
             col: this.seat.position.c,
-            seat_number: seatNumber,
+            seat_number: seatNumber
           });
         } else if (seatNumber != this.seat.seat_number) {
           alert("seat number is already taken");
@@ -193,11 +195,11 @@ export default {
     closeModal() {
       this.open = false;
     },
-    changeClass(){
-      this.changeSeatClass(this.seat.seat_number, this.defaultSeatClass)
-      this.closeModal()
+    changeClass() {
+      this.changeSeatClass(this.seat.seat_number, this.defaultSeatClass);
+      this.closeModal();
     }
-  },
+  }
 };
 </script>
 

@@ -47,45 +47,45 @@ import TableHeader from "./TableHeader.vue";
 export default {
   components: {
     Seat,
-    TableHeader,
+    TableHeader
   },
   inject: ["disableSeat"],
   props: {
     seats: {
       required: true,
-      type: Array,
+      type: Array
     },
     cols: {
       required: true,
-      type: Number,
+      type: Number
     },
     rows: {
       required: true,
-      type: Number,
+      type: Number
     },
     aisleColumns: {
       default: () => [],
-      type: Array,
+      type: Array
     },
     aisleRows: {
       default: () => [],
-      type: Array,
+      type: Array
     },
     gaps: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     disabledSeats: {
       default: () => [],
-      type: Array,
-    },
+      type: Array
+    }
   },
   data() {
     return {};
   },
   methods: {
     getSeat(r, c) {
-      const seat = this.seats.find((seat) => {
+      const seat = this.seats.find(seat => {
         return seat.position.r == r && seat.position.c == c;
       });
 
@@ -98,14 +98,14 @@ export default {
         }
       }
 
-      if (this.aisleColumns.some((column) => column == c)) {
-        if (this.aisleRows.some((row) => row == r)) {
+      if (this.aisleColumns.some(column => column == c)) {
+        if (this.aisleRows.some(row => row == r)) {
           return true;
         }
         if (r >= 1 && r <= this.rows - 1) {
           return true;
         }
-      } else if (this.aisleRows.some((row) => row == r)) {
+      } else if (this.aisleRows.some(row => row == r)) {
         return true;
       }
       return false;
@@ -126,7 +126,7 @@ export default {
           this.disableSeat({ row: i, col: index });
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>

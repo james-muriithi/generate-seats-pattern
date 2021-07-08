@@ -29,9 +29,9 @@
 export default {
   data() {
     return {
-      showModal: false,
+      showModal: false
     };
-  },
+  }
 };
 </script>
 
@@ -100,5 +100,4 @@ export default {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
-
 </style>
