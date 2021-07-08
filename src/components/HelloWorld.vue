@@ -7,6 +7,7 @@
           :aisleColumns="aisleColumns"
           :aisleRows="aisleRows"
           :gaps="gaps"
+          :seatClasses="seatClasses"
         ></form-section>
       </div>
       <div class="col-sm-7 py-5">
@@ -57,11 +58,26 @@ export default {
       rows: 0,
       aisleColumns: [],
       aisleRows: [],
-      gaps: [
-        // { row: 2, col: 1 },
-        // { row: 3, col: 1 },
+      gaps: [],
+      disabledSeats: [],
+      defaultSeatClass: null,
+      seatClasses: [
+        {
+          id: 1,
+          name: "Normal",
+          color: "blue",
+        },
+        {
+          id: 2,
+          name: "Economy",
+          color: "green",
+        },
+        {
+          id: 3,
+          name: "VIP",
+          color: "#f18b37",
+        },
       ],
-      disabledSeats: [{ row: 3, col: 1 }],
     };
   },
   methods: {
@@ -81,7 +97,8 @@ export default {
       this.rows = parseInt(data.rows) || this.rows;
       this.cols = parseInt(data.cols) || this.cols;
       this.aisleColumns = data.aisleColumns || this.aisleColumns;
-      this.seat_prefix = data.seat_prefix || this.seat_prefix;
+      this.seat_prefix = data.seat_prefix == '' ? '' : data.seat_prefix || this.seat_prefix;
+      this.defaultSeatClass = data.defaultSeatClass || this.defaultSeatClass;
 
       this.seats = [];
       for (let y = 1; y <= this.rows; ++y) {
@@ -92,6 +109,7 @@ export default {
               status: "RA",
               seat_number: `${this.seat_prefix}${seat_number}`,
               disabled: this.isDisabled(y, x),
+              class: this.defaultSeatClass ?? null,
             });
             seat_number++;
           }

@@ -22,6 +22,18 @@
         />
       </div>
       <div class="col-12 mb-2">
+        <label for="" class="form-label">Default Seat class</label>
+        <select class="form-control" v-model="defaultSeatClass">
+          <option
+            :value="seatClass.id"
+            v-for="seatClass in seatClasses"
+            :key="seatClass.id"
+          >
+            {{ seatClass.name }}
+          </option>
+        </select>
+      </div>
+      <div class="col-12 mb-2">
         <label for="" class="form-label">Seat Number Prefix (optional)</label>
         <input
           type="text"
@@ -77,7 +89,7 @@ import MaterialChip from "./UI/MaterialChip.vue";
 export default {
   components: { MaterialChip },
   emits: ["generate"],
-  inject: ['removeAisleColumn', 'removeAisleRow', 'removeGap'],
+  inject: ["removeAisleColumn", "removeAisleRow", "removeGap"],
   props: {
     aisleColumns: {
       default: () => [],
@@ -95,12 +107,17 @@ export default {
       default: () => [],
       type: Array,
     },
+    seatClasses: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       rows: "",
       cols: "",
       seat_prefix: "",
+      defaultSeatClass: "1",
     };
   },
   methods: {
@@ -109,7 +126,11 @@ export default {
         rows: this.rows,
         cols: this.cols,
         seat_prefix: this.seat_prefix,
+        defaultSeatClass: this.getSeatClass(this.defaultSeatClass),
       });
+    },
+    getSeatClass(id) {
+      return this.seatClasses.find((seatClass) => seatClass.id == id);
     },
   },
 };
