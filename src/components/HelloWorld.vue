@@ -48,6 +48,8 @@ export default {
       getSeatWithRC: this.getSeat,
       removeGap: this.removeGap,
       disableSeat: this.disableSeat,
+      seatClasses: this.seatClasses,
+      changeSeatClass: this.changeSeatClass
     };
   },
   data() {
@@ -181,6 +183,13 @@ export default {
         ({ row: r, col: c }) => r != row && c != col
       );
       this.generateSeats({});
+    },
+    changeSeatClass(seatNumber, classId){
+      let seat = this.getSeatWithSeatNumber(seatNumber)
+      seat.class = this.getSeatClass(classId)
+    },
+    getSeatClass(id) {
+      return this.seatClasses.find((seatClass) => seatClass.id == id);
     },
   },
 };

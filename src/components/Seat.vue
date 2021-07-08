@@ -1,5 +1,5 @@
 <template>
-  <span :style="seatClassColors">
+  <span :style="seatClassColors" :title="seatTooltip">
     <svg
       id="Layer_1"
       data-name="Layer 1"
@@ -35,11 +35,41 @@
       <v-contextmenu-item @click="disableMySeat">{{
         seat.disabled ? "Enable Seat" : "Disable Seat"
       }}</v-contextmenu-item>
-      <v-contextmenu-item>
-        Change Seat Class
+      <v-contextmenu-item @click="showModal"
+        >Change Seat Class
       </v-contextmenu-item>
       <v-contextmenu-item @click="renameMySeat">Rename Seat</v-contextmenu-item>
     </v-contextmenu>
+
+    <Modal v-model="open" :close="closeModal">
+      <div class="modal">
+        <div class="pt-2">
+          <p class="border-bottom mb-0">Change Seat Class</p>
+        </div>
+        <div class="modal-body text-start mb-2">
+          <div class="row">
+            <div class="col-12 mb-2">
+              <label for="" class="form-label">Default Seat class</label>
+              <select class="form-control" v-model="defaultSeatClass">
+                <option
+                  :value="seatClass.id"
+                  v-for="seatClass in seatClasses"
+                  :key="seatClass.id"
+                >
+                  {{ seatClass.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="ml-auto text-right mb-2 me-2 border-top pt-1">
+          <button class="btn btn-secondary" @click="closeModal">close</button>
+          <button class="btn btn-primary ml-2" @click="changeClass">
+            Update
+          </button>
+        </div>
+      </div>
+    </Modal>
   </span>
 </template>
 
@@ -56,7 +86,15 @@ export default {
     [Contextmenu.name]: Contextmenu,
     [ContextmenuItem.name]: ContextmenuItem,
   },
-  inject: ["makeGap", "renameSeat", "getSeat", "getSeatWithRC", "disableSeat"],
+  inject: [
+    "makeGap",
+    "renameSeat",
+    "getSeat",
+    "getSeatWithRC",
+    "disableSeat",
+    "seatClasses",
+    "changeSeatClass",
+  ],
   props: {
     idxr: {
       type: Number,
@@ -74,7 +112,16 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      open: false,
+      defaultSeatClass: 1,
+    };
+  },
   computed: {
+    seatTooltip(){
+      return this.seat.disabled ? `Disabled seat`: `${this.seat.class.name} class`
+    },
     seatClassColors() {
       let data = {};
       if (this.seat.disabled) {
@@ -82,8 +129,7 @@ export default {
           "--disabled-stroke": "#ada9a9",
           "--disabled-fill": "#ada9a9",
         };
-      }
-      else if (this.seat.class) {
+      } else if (this.seat.class) {
         data = {
           "--stroke": "transparent",
           "--fill": this.seat.class.color,
@@ -94,8 +140,8 @@ export default {
     },
   },
   watch: {
-    seat: function (){
-
+    seat() {
+      this.defaultSeatClass = this.seat.class.id || this.defaultSeatClass;
     },
   },
   methods: {
@@ -128,7 +174,6 @@ export default {
       });
     },
     renameMySeat() {
-      console.log(this.seat);
       var seatNumber = prompt("Please enter your name", this.seat.seat_number);
       if (seatNumber) {
         if (!this.getSeat(seatNumber)) {
@@ -142,11 +187,40 @@ export default {
         }
       }
     },
+    showModal() {
+      this.open = true;
+    },
+    closeModal() {
+      this.open = false;
+    },
+    changeClass(){
+      this.changeSeatClass(this.seat.seat_number, this.defaultSeatClass)
+      this.closeModal()
+    }
   },
 };
 </script>
 
 <style scoped>
+.ml-2 {
+  margin-left: 8px;
+}
+.ml-auto {
+  margin-left: auto;
+}
+.text-right {
+  text-align: right;
+}
+
+.modal {
+  width: 450px;
+  box-sizing: border-box;
+  background-color: #fff;
+  font-size: 20px;
+  text-align: center;
+  display: block;
+  position: initial;
+}
 .seat {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
