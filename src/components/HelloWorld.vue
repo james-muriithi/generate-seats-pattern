@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-sm-5 py-5">
+      <div class="col-sm-4 py-5">
         <form-section
           @generate="generateSeats"
           :aisleColumns="aisleColumns"
@@ -10,7 +10,7 @@
           :seatClasses="seatClasses"
         ></form-section>
       </div>
-      <div class="col-sm-7 py-5">
+      <div class="col-sm-8 py-5">
         <seat-section
           :seats="seats"
           :cols="cols"

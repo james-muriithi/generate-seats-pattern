@@ -23,10 +23,9 @@
           @disableSeats="disableSeats"
         ></table-header>
         <td
-          class="pl-2"
           v-for="(indexc, column) in cols"
           :key="column"
-          style="width: 50px; height: 50px"
+          style="width: 50px; height: 50px;padding: 3px;"
         >
           <seat
             :idxc="indexc"
