@@ -114,17 +114,17 @@ export default {
   },
   data() {
     return {
-      open: false,
+      open: false
       // defaultSeatClass: 1
     };
   },
   computed: {
     defaultSeatClass: {
-      get: function(){
+      get: function() {
         return this.seat.class.id;
       },
-      set: function(value){
-          this.defaultSeatClass = value;
+      set: function(value) {
+        this.defaultSeatClass = value;
       }
     },
     seatTooltip() {

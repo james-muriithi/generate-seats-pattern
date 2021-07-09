@@ -2,9 +2,9 @@
   <th v-contextmenu:contextmenu2>
     {{ index }}
     <v-contextmenu ref="contextmenu2">
-      <v-contextmenu-item @click="makeMyAisle" class="text-capitalize"
-        >{{ isAisle ? `Remove aisle`: `Make ${type} an aisle` }}</v-contextmenu-item
-      >
+      <v-contextmenu-item @click="makeMyAisle" class="text-capitalize">{{
+        isAisle ? `Remove aisle` : `Make ${type} an aisle`
+      }}</v-contextmenu-item>
       <v-contextmenu-item v-if="!isAisle" @click="showModal"
         >Change Seats Class</v-contextmenu-item
       >
@@ -50,39 +50,39 @@ import "v-contextmenu/dist/themes/default.css";
 
 export default {
   directives: {
-    contextmenu: directive,
+    contextmenu: directive
   },
   inject: ["makeAisle", "seatClasses"],
   components: {
     [Contextmenu.name]: Contextmenu,
-    [ContextmenuItem.name]: ContextmenuItem,
+    [ContextmenuItem.name]: ContextmenuItem
   },
   emits: ["disableSeats", "changeSeatsClass"],
   props: {
     index: {
       type: Number,
-      required: true,
+      required: true
     },
     type: {
       type: String,
-      default: "row",
+      default: "row"
     },
     isAisle: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       open: false,
-      defaultSeatsClass: 1,
+      defaultSeatsClass: 1
     };
   },
   methods: {
     makeMyAisle() {
       let data = {
         index: this.index,
-        target: this.type,
+        target: this.type
       };
 
       this.makeAisle(data);
@@ -90,7 +90,7 @@ export default {
     disableSeats() {
       this.$emit("disableSeats", {
         index: this.index,
-        target: this.type,
+        target: this.type
       });
     },
     showModal() {
@@ -103,12 +103,12 @@ export default {
       this.$emit("changeSeatsClass", {
         index: this.index,
         target: this.type,
-        seatClassId: this.defaultSeatsClass,
+        seatClassId: this.defaultSeatsClass
       });
 
       this.closeModal();
-    },
-  },
+    }
+  }
 };
 </script>
 
