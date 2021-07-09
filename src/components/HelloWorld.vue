@@ -31,11 +31,11 @@ import FormSection from "./SeatLayoutForm.vue";
 export default {
   components: {
     SeatSection,
-    FormSection
+    FormSection,
   },
   name: "HelloWorld",
   props: {
-    msg: String
+    msg: String,
   },
   provide() {
     return {
@@ -49,7 +49,7 @@ export default {
       removeGap: this.removeGap,
       disableSeat: this.disableSeat,
       seatClasses: this.seatClasses,
-      changeSeatClass: this.changeSeatClass
+      changeSeatClass: this.changeSeatClass,
     };
   },
   data() {
@@ -67,29 +67,29 @@ export default {
         {
           id: 1,
           name: "Normal",
-          color: "blue"
+          color: "blue",
         },
         {
           id: 2,
           name: "Economy",
-          color: "green"
+          color: "green",
         },
         {
           id: 3,
           name: "VIP",
-          color: "#f18b37"
-        }
-      ]
+          color: "#f18b37",
+        },
+      ],
     };
   },
   methods: {
     getSeat(r, c) {
-      return this.seats.find(seat => {
+      return this.seats.find((seat) => {
         return seat.position.r == r && seat.position.c == c;
       });
     },
     getSeatWithSeatNumber(seatNumber) {
-      return this.seats.find(seat => {
+      return this.seats.find((seat) => {
         return seat.seat_number == seatNumber;
       });
     },
@@ -112,7 +112,7 @@ export default {
               status: "RA",
               seat_number: `${this.seat_prefix}${seat_number}`,
               disabled: this.isDisabled(y, x),
-              class: this.defaultSeatClass ?? null
+              class: this.defaultSeatClass ?? null,
             });
             seat_number++;
           }
@@ -126,14 +126,14 @@ export default {
         }
       }
 
-      if (this.aisleColumns.some(column => column == c)) {
-        if (this.aisleRows.some(row => row == r)) {
+      if (this.aisleColumns.some((column) => column == c)) {
+        if (this.aisleRows.some((row) => row == r)) {
           return true;
         }
         if (r >= 1 && r <= this.rows - 1) {
           return true;
         }
-      } else if (this.aisleRows.some(row => row == r)) {
+      } else if (this.aisleRows.some((row) => row == r)) {
         return true;
       }
       return false;
@@ -160,10 +160,18 @@ export default {
     },
     makeAisle(data) {
       if (data.target == "row") {
-        this.aisleRows.push(data.index);
-        this.generateSeats({});
+        if (this.aisleRows.some((r) => r == data.index)) {
+          this.removeAisleRow(data.index);
+        } else {
+          this.aisleRows.push(data.index);
+        }
       } else {
-        this.aisleColumns.push(data.index);
+        if (this.aisleColumns.some((c) => c == data.index)) {
+          this.removeAisleColumn(data.index);
+        } else {
+          this.aisleColumns.push(data.index);
+        }
+        
         this.generateSeats({});
       }
     },
@@ -172,11 +180,11 @@ export default {
       seat.seat_number = seat_number;
     },
     removeAisleColumn(col) {
-      this.aisleColumns = this.aisleColumns.filter(column => column != col);
+      this.aisleColumns = this.aisleColumns.filter((column) => column != col);
       this.generateSeats({});
     },
     removeAisleRow(row) {
-      this.aisleRows = this.aisleRows.filter(r => r != row);
+      this.aisleRows = this.aisleRows.filter((r) => r != row);
       this.generateSeats({});
     },
     removeGap({ row, col }) {
@@ -190,8 +198,8 @@ export default {
       seat.class = this.getSeatClass(classId);
     },
     getSeatClass(id) {
-      return this.seatClasses.find(seatClass => seatClass.id == id);
-    }
-  }
+      return this.seatClasses.find((seatClass) => seatClass.id == id);
+    },
+  },
 };
 </script>

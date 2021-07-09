@@ -44,12 +44,12 @@
     <Modal v-model="open" :close="closeModal">
       <div class="modal">
         <div class="pt-2">
-          <p class="border-bottom mb-0">Change Seat Class</p>
+          <p class="border-bottom mb-0">Change Seats Class</p>
         </div>
         <div class="modal-body text-start mb-2">
           <div class="row">
             <div class="col-12 mb-2">
-              <label for="" class="form-label">Default Seat class</label>
+              <label for="" class="form-label">Default Seat Class</label>
               <select class="form-control" v-model="defaultSeatClass">
                 <option
                   :value="seatClass.id"
@@ -115,10 +115,18 @@ export default {
   data() {
     return {
       open: false,
-      defaultSeatClass: 1
+      // defaultSeatClass: 1
     };
   },
   computed: {
+    defaultSeatClass: {
+      get: function(){
+        return this.seat.class.id;
+      },
+      set: function(value){
+          this.defaultSeatClass = value;
+      }
+    },
     seatTooltip() {
       return this.seat.disabled
         ? `Disabled seat`
@@ -142,9 +150,9 @@ export default {
     }
   },
   watch: {
-    seat() {
-      this.defaultSeatClass = this.seat.class.id || this.defaultSeatClass;
-    }
+    // seat() {
+    //   this.defaultSeatClass = this.seat.class.id;
+    // }
   },
   methods: {
     seatCentre(r, c) {
